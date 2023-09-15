@@ -198,4 +198,40 @@ def index_areas(x, y):
     return index
              
              
+
 #================================================================================== 
+
+
+
+def dt_to_dens(ddt):
+    
+    import numpy as np
+    from datetime import datetime
+    from datetime import timedelta
+    
+        # SMP density
+#     slope = 6.731204260456802e-06 
+#     intercept = 317.75502567006447
+    #SMP updated
+#     slope = 6.85913355204457e-06
+#     intercept = 317.0393354400399
+
+#     slope = 6.90112686831536e-06
+#     intercept = 318.4207487044535
+
+    slope = 4.410409405920197e-06 #from willatt_figure_s5.ipynb
+    intercept = 258.3836611967684 #from willatt_figure_s5.ipynb
+
+    # r_l, p_l, se
+    # 0.40620323156682553 1.3795142453876656e-09 1.0601743006105722e-06
+    line_x = [datetime(2019,11,7), datetime(2020,1,30)]
+    ddt_start = datetime(2019,11,7)
+    line_y = np.array([(x_loc - ddt_start).total_seconds() for x_loc in line_x])*slope + intercept
+
+#     print(line_x, line_y)
+    
+    dens_dt = (ddt - ddt_start).total_seconds()*slope + intercept
+    
+    vs = 1/np.sqrt(1+1.9*dens_dt/1000)
+    
+    return dens_dt, vs
